@@ -1,0 +1,195 @@
+/* ================================
+   Global Styles
+================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7f6;
+    min-height: 100vh;              /* FULL screen height */
+    display: flex;
+    align-items: center;            /* vertical centering */
+    justify-content: center;
+}
+
+/* ================================
+   Main Container
+================================ */
+.container {
+    width: 90%;
+    max-width: 1100px;
+    min-height: 70vh;               /* makes it fill most of page */
+    
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    
+}
+
+/* ================================
+   Page Title
+================================ */
+h2 {
+    text-align: center;
+    color: #2ecc71;
+    margin-bottom: 25px;
+    font-size: 28px;
+}
+
+/* ================================
+   Dashboard Layout
+================================ */
+.dashboard {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+/* ================================
+   Points Card
+================================ */
+.points-card {
+    width: 30%;
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: left; /* Left alignment */
+}
+
+/* Coin Video */
+.video-container {
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+.video-container video {
+    width: 170px;
+    height: auto;
+}
+
+/* Points Text */
+.points-card h3 {
+    font-size: 18px;
+    color: #145a32;
+    margin-bottom: 5px;
+    
+}
+
+#points {
+    font-size: 48px;
+    font-weight: bold;
+    color: #D4AF37;
+    line-height: 1.1;
+    position: absolute;
+    left: 23.4%
+    transform: translateX(-50%);
+    align-items: center; 
+    /* display: flex;
+    justify-content: center;
+    align-items: center; 
+    /* text-align: left; */
+}
+
+/* ================================
+   Leaderboard Card
+================================ */
+.leaderboard-card {
+    width: 70%;
+}
+
+.leaderboard-card h3 {
+    text-align: center;
+    margin-bottom: 15px;
+    color: #2ecc71;
+}
+
+/* ================================
+   Leaderboard Table
+================================ */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+th {
+    background: #2ecc71;
+    color: #ffffff;
+    padding: 14px;
+    font-size: 15px;
+}
+
+td {
+    padding: 14px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+}
+
+tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+/* ================================
+   Rank Styling
+================================ */
+.rank {
+    font-weight: bold;
+}
+
+.top1 {
+    color: gold;
+}
+
+.top2 {
+    color: silver;
+}
+
+.top3 {
+    color: #cd7f32;
+}
+
+/* ================================
+   Responsive Design
+================================ */
+@media (max-width: 900px) {
+    .dashboard {
+        flex-direction: column;
+    }
+
+    .points-card,
+    .leaderboard-card {
+        width: 100%;
+    }
+
+    .points-card {
+        text-align: center;
+    }
+
+    .video-container {
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    h2 {
+        font-size: 22px;
+    }
+
+    #points {
+        font-size: 38px;
+    }
+
+    th,
+    td {
+        padding: 10px;
+        font-size: 13px;
+    }
+}

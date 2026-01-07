@@ -1,0 +1,133 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cleanup Task | Mission Clean Earth</title>
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="{% static 'users/upload_cleaned.css' %}">
+
+    <!-- Google Maps -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDa-g9F78fLXcQhvuHCQcdjMCpp7Bscr5w"></script>
+
+    <style>
+        #notification {
+            display: none;
+            margin-top: 15px;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body onload="initMap()">
+
+<div class="container">
+    <h2>Cleanup Task</h2>
+
+    <!-- Task Info -->
+    <div class="task-info">
+        <strong>Reported Location</strong>
+        <div class="status reported">Waste Reported</div>
+
+        <img src="{{ upload.image.url }}" alt="Before Cleanup">
+    </div>
+
+    <!-- Map -->
+    <div id="map" style="height:350px; width:100%; border-radius:8px;"></div>
+
+    <!-- Notification -->
+    <div id="notification"></div>
+
+    <!-- Upload Cleaned Image -->
+    <form id="cleanedForm" enctype="multipart/form-data" onsubmit="uploadCleaned(event)">
+        {% csrf_token %}
+
+        <div class="input-group">
+            <label>Upload After Cleanup Image</label>
+            <input type="file"
+                   name="cleaned_image"
+                   accept="image/*"
+                   required
+                   onchange="previewAfterImage(event)">
+            <div class="preview" id="afterPreview"></div>
+        </div>
+
+        <button type="submit" class="submit-btn">
+            Submit for Verification
+        </button>
+    </form>
+
+    <p class="note">
+        Your submission will be verified using AI image comparison.
+    </p>
+</div>
+
+<script>
+    function initMap() {
+        const location = {
+            lat: {{ upload.latitude }},
+            lng: {{ upload.longitude }}
+        };
+
+        const map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 16,
+            center: location
+        });
+
+        new google.maps.Marker({
+            position: location,
+            map: map
+        });
+    }
+
+    function previewAfterImage(event) {
+        const preview = document.getElementById("afterPreview");
+        preview.innerHTML = "";
+
+        const img = document.createElement("img");
+        img.src = URL.createObjectURL(event.target.files[0]);
+        img.style.width = "100%";
+        img.style.borderRadius = "8px";
+
+        preview.appendChild(img);
+    }
+
+    function uploadCleaned(event) {
+        event.preventDefault();
+
+        const form = document.getElementById("cleanedForm");
+        const formData = new FormData(form);
+        const submitBtn = form.querySelector("button[type='submit']");
+        submitBtn.disabled = true;
+
+        fetch("{% url 'upload_cleaned' upload.id %}", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            const note = document.getElementById("notification");
+            note.style.display = "block";
+            note.innerText = data.message;
+            note.style.color = data.status === "success" ? "green" : "red";
+
+            // ✅ AUTO REDIRECT
+            if (data.redirect) {
+                setTimeout(() => {
+                    window.location.href = data.redirect;
+                }, 1500);
+            }
+        })
+        .catch(err => console.error(err))
+        .finally(() => submitBtn.disabled = false);
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,132 @@
+/* --- Reset & Base --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: #f4fdf7;
+    padding: 40px 20px;
+}
+
+.page-title {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.page-title h2 {
+    font-size: 2rem;
+    color: #1b5e20;
+    letter-spacing: 1px;
+}
+
+/* --- The 4-Column Grid --- */
+.content-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.grid {
+    display: grid;
+    /* This forces 4 columns of equal width */
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 25px;
+    max-width: 1200px;
+    width: 100%;
+}
+
+/* --- Card Styling --- */
+.card {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: white;
+    aspect-ratio: 1 / 1; /* Makes cards square for a cleaner look */
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 20px rgba(0,0,0,0.15);
+}
+
+.card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.grayscale {
+    filter: grayscale(80%);
+    opacity: 0.7;
+}
+
+.completed-badge {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    background: #2e7d32;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 1024px) {
+    .grid {
+        grid-template-columns: repeat(3, 1fr); /* 3 per row on tablets */
+    }
+}
+
+@media (max-width: 768px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 per row on large phones */
+    }
+}
+
+@media (max-width: 480px) {
+    .grid {
+        grid-template-columns: 1fr; /* 1 per row on small phones */
+    }
+}
+
+/* --- Action Button --- */
+.actions {
+    margin-top: 50px;
+    text-align: center;
+}
+
+.btn {
+    --fancy-button-gradient-0: #8d49fd;
+    --fancy-button-gradient-50: #7f56f3;
+    --fancy-button-gradient-100: #5691f3;
+    --fancy-button-shine-top: #e9d1ff;
+    --fancy-button-shine-bottom: #adfff9;
+
+    display: inline-block;
+    text-decoration: none;
+    position: relative;
+    cursor: pointer;
+    font-weight: 600;
+    color: #fff;
+    border-radius: 30px;
+    background-image: linear-gradient(to bottom, var(--fancy-button-gradient-0), var(--fancy-button-gradient-100));
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.btn span {
+    display: block;
+    padding: 14px 32px;
+}
+
+.btn:active {
+    transform: scale(0.95);
+}

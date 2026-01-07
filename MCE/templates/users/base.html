@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Mission Clean Earth{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="{% static 'users/base.css' %}">
+
+    <!-- Page CSS -->
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    {% include 'users/header.html' %}
+    {% block content %}
+    {% endblock content %}
+    {% include 'users/footer.html' %}
+
+</body>
+</html>

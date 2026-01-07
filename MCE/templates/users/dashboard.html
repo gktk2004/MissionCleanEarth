@@ -1,0 +1,37 @@
+{% extends 'users/base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'users/dashboard.css' %}">
+
+<div class="dashboard-container">
+    <header class="page-title">
+        <br><br><br>
+        <h2>TO BE CLEANED</h2>
+        <p>Click an image to upload the cleaned version</p>
+    </header>
+
+    <div class="grid">
+        {% for img in images %}
+            {% if img.is_completed %}
+                <div class="card completed">
+                    <img src="{{ img.image.url }}" alt="Cleaned Image" class="grayscale">
+                    <span class="completed-badge">✔ Completed</span>
+                </div>
+            {% else %}
+                <a href="{% url 'upload_cleaned' img.id %}" class="card">
+                    <img src="{{ img.image.url }}" alt="Uploaded Image">
+                </a>
+            {% endif %}
+        {% empty %}
+            <p class="empty-text">No images uploaded yet</p>
+        {% endfor %}
+    </div>
+
+    <div class="actions">
+        <a href="{% url 'upload' %}" class="btn">
+            <span>SHARE HERE</span>
+        </a>
+    </div>
+</div>
+{% endblock %}

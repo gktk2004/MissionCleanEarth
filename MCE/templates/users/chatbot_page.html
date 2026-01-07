@@ -1,0 +1,68 @@
+{% extends 'users/base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'users/chatbot.css' %}">
+
+<div class="chat-page-container">
+    <div class="chat-header">
+        <h1>🌱 Mission Clean Earth Assistant</h1>
+        <p>Your guide to waste removal, rewards, and environmental impact.</p>
+    </div>
+
+    <div id="chat-window" class="chat-window">
+        <div class="message bot">
+            <div class="text">
+                Hello! I am the Green Expert. I can help you identify polluted areas, explain our 
+                AI verification process, or check your reward status. How can I help?
+            </div>
+        </div>
+        </div>
+
+    <form id="chat-form" class="chat-input-area">
+        {% csrf_token %}
+        <input type="text" id="user-input" placeholder="Ask about recycling, OpenCV verification, or mapping..." required>
+        <button type="submit">Send ➤</button>
+    </form>
+</div>
+
+<script>
+    const chatForm = document.getElementById('chat-form');
+    const chatWindow = document.getElementById('chat-window');
+    const userInput = document.getElementById('user-input');
+
+    chatForm.onsubmit = async (e) => {
+        e.preventDefault();
+        const message = userInput.value.trim();
+        if (!message) return;
+
+        // Append User Message
+        appendMessage(message, 'user');
+        userInput.value = '';
+
+        // Fetch AI Response
+        try {
+            const response = await fetch("{% url 'chatbot_page' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: JSON.stringify({ message: message })
+            });
+            const data = await response.json();
+            appendMessage(data.reply, 'bot');
+        } catch (error) {
+            appendMessage("Sorry, I'm having trouble connecting to the AI Expert right now.", 'bot');
+        }
+    };
+
+    function appendMessage(text, sender) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `message ${sender}`;
+        msgDiv.innerHTML = `<div class="text">${text}</div>`;
+        chatWindow.appendChild(msgDiv);
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,125 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload | Mission Clean Earth</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'users/upload.css' %}">
+
+    <!-- Google Maps -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDa-g9F78fLXcQhvuHCQcdjMCpp7Bscr5w"></script>
+</head>
+
+<body onload="initMap()">
+
+<div class="container">
+
+    <h2>📸 Upload Waste Image</h2>
+
+    <div id="notification"></div>
+
+    <form id="uploadForm" enctype="multipart/form-data" onsubmit="uploadImage(event)">
+        {% csrf_token %}
+
+        <!-- Image Upload -->
+        <div class="input-group">
+            <label>Upload Image</label>
+            {{ form.image }}
+        </div>
+
+        <!-- Location Buttons -->
+        <div class="input-group">
+            <label>Choose Location</label>
+            <button type="button" class="location-btn" onclick="useCurrentLocation()">
+                📍 Use Current Location
+            </button>
+        </div>
+
+        <!-- Hidden Fields -->
+        {{ form.latitude }}
+        {{ form.longitude }}
+
+        <!-- Map -->
+        <div id="map"></div>
+
+        <!-- Submit -->
+        <button type="submit" class="submit-btn">Upload</button>
+    </form>
+
+    <p class="note">
+        🗺️ Click on the map or use current location to mark the area.
+    </p>
+
+</div>
+
+<script>
+    let map, marker;
+
+    function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 6,
+            center: { lat: 10.85, lng: 76.27 }
+        });
+
+        map.addListener("click", (e) => {
+            setMarker(e.latLng.lat(), e.latLng.lng());
+        });
+    }
+
+    function setMarker(lat, lng) {
+        if (marker) marker.setMap(null);
+
+        marker = new google.maps.Marker({
+            position: { lat, lng },
+            map
+        });
+
+        document.getElementById("id_latitude").value = lat;
+        document.getElementById("id_longitude").value = lng;
+
+        map.setCenter({ lat, lng });
+        map.setZoom(15);
+    }
+
+    function useCurrentLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                pos => setMarker(pos.coords.latitude, pos.coords.longitude),
+                () => alert("Location access denied")
+            );
+        }
+    }
+
+    function uploadImage(event) {
+        event.preventDefault();
+
+        const form = document.getElementById("uploadForm");
+        const formData = new FormData(form);
+        const submitBtn = document.querySelector(".submit-btn");
+        submitBtn.disabled = true;
+
+        fetch("{% url 'upload' %}", {
+            method: "POST",
+            headers: { "X-CSRFToken": "{{ csrf_token }}" },
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            const note = document.getElementById("notification");
+            note.style.display = "block";
+            note.innerText = data.message;
+            note.style.color = data.status === "success" ? "green" : "red";
+
+            if (data.status === "success" && data.redirect) {
+                setTimeout(() => window.location.href = data.redirect, 1500);
+            }
+        })
+        .finally(() => submitBtn.disabled = false);
+    }
+</script>
+
+</body>
+</html>

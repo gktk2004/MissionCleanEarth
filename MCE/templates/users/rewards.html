@@ -1,0 +1,65 @@
+{% extends 'users/base.html' %}
+{% load static %}
+ {% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rewards | Mission Clean Earth</title>
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="{% static 'users/rewards.css' %}">
+</head>
+<body>
+
+<div class="container">
+
+    <h2>REWARDS</h2>
+
+    <!-- Points + Leaderboard -->
+    <div class="dashboard">
+
+        <!-- User Points -->
+        <div class="points-card">
+            
+            <!-- ✅ Video ABOVE points (LEFT aligned) -->
+            <div class="video-container left-video">
+                <video autoplay loop muted playsinline>
+                <source src="{% static 'videos/c.mp4' %}" type="video/mp4">
+                </video>
+            </div>
+
+            
+            <p id="points">{{ user_points }}</p>
+        </div>
+
+        <!-- Leaderboard -->
+        <div class="leaderboard-card">
+            <h3>Top 5 Scorers</h3>
+
+            <table>
+                <tr>
+                    <th>Rank</th>
+                    <th>User</th>
+                    <th>Points</th>
+                </tr>
+
+                {% for profile in top_scorers %}
+                <tr>
+                    <td class="rank {% if forloop.counter == 1 %}top1{% elif forloop.counter == 2 %}top2{% elif forloop.counter == 3 %}top3{% endif %}">
+                        {{ forloop.counter }}
+                    </td>
+                    <td>{{ profile.user.username }}</td>
+                    <td>{{ profile.points }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
+{% endblock %}
