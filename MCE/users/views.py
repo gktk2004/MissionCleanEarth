@@ -184,7 +184,7 @@ import json
 
 
 # Securely configure the API
-genai.configure(api_key="AIzaSyB0uxZ0sVDOJ7sg8T2PbmFVACIbAkc6k-w")
+genai.configure(api_key="ADD YOUR G-MAPS API KEY HERE")
 
 def green_expert_api(request):
     if request.method == "POST":
